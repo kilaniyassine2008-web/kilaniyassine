@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic wife</title>
+    <!-- StPageFlip Library for 3D Flip Effect -->
+    <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Poppins:wght@300;400;500;600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #111111;
+            --page-bg: #f7f5f0;
+            --accent-red: #8b1e23;
+            --text-dark: #1a1a1a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: black;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .magazine-wrapper {
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+        }
+
+        .page {
+            background-color:var(--accent-red);
+            color: rgb(7, 7, 7);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid #e0dad0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- COVER PAGE --- */
+        .page.cover {
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4)), url('Screenshot_20251111-203957(1).jpg') center/cover;
+            color: white;
+            text-align: center;
+        }
+
+        .cover-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .cover-title-main {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.2rem;
+            letter-spacing: 4px;
+            font-weight: 700;
+        }
+
+        .cover-bottom {
+            text-align: left;
+        }
+
+        .cover-headline {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .cover-subtext {
+            font-size: 0.75rem;
+            max-width: 80%;
+            line-height: 1.3;
+            opacity: 0.9;
+        }
+
+        /* --- INDEX PAGE --- */
+        .index-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            height: 100%;
+        }
+
+        .index-intro {
+            font-size: 0.75rem;
+            line-height: 1.5;
+            color: #f9f5f5;
+        }
+
+        .index-list {
+            list-style: none;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .index-item {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            border-bottom: 1px dotted #aaa;
+            padding-bottom: 3px;
+        }
+
+        .index-num {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .index-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- WHO'S THIS GIRL --- */
+        .polaroid-stack {
+            position: relative;
+            height: 220px;
+            margin-top: 10px;
+        }
+
+        .polaroid {
+            background: rgb(13, 13, 13);
+            padding: 8px 8px 25px 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            position: absolute;
+            width: 130px;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .polaroid-1 { transform: rotate(-8deg); left: 10px; top: 10px; }
+        .polaroid-2 { transform: rotate(5deg); right: 10px; top: 20px; }
+
+        .handwritten-text {
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        /* --- HER SMILE (Film Strip & Collage) --- */
+        .smile-header {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .film-strip {
+            background: #111;
+            padding: 10px 5px;
+            display: flex;
+            gap: 8px;
+            border-radius: 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .film-frame {
+            flex: 1;
+            height: 120px;
+            background-color: #333;
+            overflow: hidden;
+            border: 2px solid #111;
+        }
+
+        .film-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- LOVE QUESTIONS GAME --- */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .game-card {
+            background: #fffdf9;
+            border: 1px solid #dcd6cd;
+            padding: 10px 6px;
+            text-align: center;
+            font-size: 0.65rem;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            min-height: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .game-card:hover, .game-card.active {
+            background-color: var(--accent-red);
+            color: white;
+            border-color: var(--accent-red);
+        }
+
+        /* --- RED PAGE / SONGS / HEART PHOTO GRID --- */
+        .page.red-theme {
+            background-color: var(--accent-red);
+            color: white;
+        }
+
+        .music-player {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .play-btn {
+            background: rgb(14, 14, 14);
+            color: var(--accent-red);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .heart-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            max-width: 240px;
+            margin: 0 auto;
+        }
+
+        .heart-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 4px;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+
+        /* --- END & LETTER PAGE --- */
+        .letter-text {
+            font-family: 'Caveat', cursive;
+            font-size: 1.25rem;
+            line-height: 1.5;
+            color: #fffafa;
+        }
+
+        .end-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Controls */
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: #ffffff;
+            color: #111;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: var(--accent-red);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="magazine-wrapper" id="magazine">
+        
+        <!-- COVER PAGE -->
+        <div class="page cover" data-density="hard">
+            <div class="cover-header">
+                <span>LOVE & BEAUTY</span>
+                <span>NOVEMBRE 2026</span>
+            </div>
+            <div>
+                <h1 class="cover-title-main">Nawwarti</h1>
+                <p style="letter-spacing: 5px; font-size: 0.8rem;">🫶🏻✨</p>
+            </div>
+            <div class="cover-bottom">
+                <strong class="cover-headline">A magic women </strong>
+                <p class="cover-subtext">This magazine talks about the beauty of this girl in my heart💕💕 </p>
+            </div>
+        </div>
+
+        <!-- INDEX PAGE -->
+        <div class="page">
+            <h3 style="font-family: 'Playfair Display'; font-size: 1.5rem; margin-bottom: 15px;">PAGES :</h3>
+            <div class="index-container">
+                <div class="index-intro">
+                    <p>This is not just a magazine. It's a collection of "YOU", your smile, your magic, your laughter, and every little spark that makes me deep in your love🌹🌹.</p>
+                </div>
+                <ul class="index-list">
+                    <li class="index-item"><span class="index-num">1</span><span class="index-title">Polaroid</span></li>
+                    <li class="index-item"><span class="index-num">2</span><span class="index-title">About Her</span></li>
+                    <li class="index-item"><span class="index-num">3</span><span class="index-title">Her Smile</span></li>
+                    <li class="index-item"><span class="index-num">4</span><span class="index-title">Her Vision</span></li>
+                    <li class="index-item"><span class="index-num">5</span><span class="index-title">Traveling</span></li>
+                    <li class="index-item"><span class="index-num">8</span><span class="index-title">Love Card</span></li>
+                    <li class="index-item"><span class="index-num">9</span><span class="index-title">A Letter</span></li>
+                    <li class="index-item"><span class="index-num">10</span><span class="index-title">The End</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- WHO'S THIS GIRL -->
+        <div class="page">
+            <h2 style="font-family: 'Playfair Display'; font-size: 2rem; font-style: italic;">Who's This Girl</h2>
+            <div class="polaroid-stack">
+                <div class="polaroid polaroid-1">
+                    <img src="image copy 2.png" alt="Photo 1">
+                </div>
+                <div class="polaroid polaroid-2">
+                    <img src="image copy 3.png" alt="Photo 2">
+                </div>
+            </div>
+            <p class="handwritten-text">
+                She's grateful, quietly confident,the cutest person in the life,the most funny person to me,she is my sweatheart,she is amazing women your are LOML,and the kind of happiness that hapen to me nawwarti zayna🫶🏻✨
+            </p>
+        </div>
+
+        <!-- HER SMILE -->
+        <div class="page">
+            <h2 class="smile-header">Her Smile</h2>
+            <div class="film-strip">
+                <div class="film-frame"><img src="IMG-20260312-WA0022(1).jpg" alt="Frame 1"></div>
+                <div class="film-frame"><img src="image copy 4.png" alt="Frame 2"></div>
+                <div class="film-frame"><img src="IMG_20250828_152833_848(1).jpg" alt="Frame 3"></div>
+            </div>
+            <p style="font-family: 'Caveat'; font-size: 1.3rem; text-align: center; margin-top: 20px;">
+                "Enjoy every moment of your life ya rou7 9lbi inti."<br>
+                "Nhebek brcha Nawwarti hob hyeti"
+            </p>
+        </div>
+
+        <!-- LOVE QUESTIONS CARD GAME -->
+        <div class="page">
+            <p style="font-size: 0.65rem; text-align: center; letter-spacing: 2px;">FUN & ROMANTIC</p>
+            <h2 style="font-family: 'Playfair Display'; font-size: 1.4rem; text-align: center; margin-bottom: 10px;">LOVE QUESTIONS CARD GAME</h2>
+            
+            <div class="cards-grid">
+                <div class="game-card" onclick="toggleCard(this)">What makes you feel most loved?</div>
+                <div class="game-card" onclick="toggleCard(this)">What is your favorite memory?</div>
+                <div class="game-card" onclick="toggleCard(this)">Is there a smell that instantly relaxes you?</div>
+                <div class="game-card" onclick="toggleCard(this)">What was your first impression of me?</div>
+                <div class="game-card" onclick="toggleCard(this)">What's your love language?</div>
+                <div class="game-card" onclick="toggleCard(this)">What is your dream trip?</div>
+                <div class="game-card" onclick="toggleCard(this)">What's your biggest dream?</div>
+                <div class="game-card" onclick="toggleCard(this)">What is your biggest fear?</div>
+                <div class="game-card" onclick="toggleCard(this)">What do you think our future looks like?</div>
+            </div>
+        </div>
+
+        <!-- HER FAV SONGS & HEART GRID (RED PAGE) -->
+        <div class="page red-theme">
+            <h3 style="font-family: 'Playfair Display'; font-size: 1.5rem; margin-bottom: 10px;">Her Fav Songs 🖤</h3>
+            
+            <div class="music-player">
+                <button class="play-btn" id="playAudio">▶</button>
+                <div>
+                    <h4 style="font-size: 0.85rem;">Young and Beautiful</h4>
+                    <p style="font-size: 0.7rem; opacity: 0.8;">Lana Del Rey </p>
+                </div>
+            </div>
+            <audio id="bgMusic" src="Lana Del Rey - Young and Beautiful-[AudioTrimmer.com].mp3"></audio>
+
+            <div class="heart-grid">
+                <img class="heart-photo" src="IMG_20260209_092929_227(1).jpg" alt="Memory">
+                <img class="heart-photo" src="IMG-20251126-WA0001(1).jpg" alt="Memory">
+                <img class="heart-photo" src="IMG_20260308_210043_340(1).jpg" alt="Memory">
+                <img class="heart-photo" src="Screenshot_20251111-203944(1).jpg" alt="Memory">
+            </div>
+            <p style="font-family: 'Caveat'; font-size: 1.2rem; text-align: center; margin-top: 10px;">
+                "Every moment by your side feels like a story."
+            </p>
+        </div>
+
+        <!-- LETTER & END OF MAGAZINE -->
+        <div class="page" data-density="hard">
+            <div>
+                <p style="font-family: 'Caveat'; font-size: 1.4rem;">Dear Sweetheart,</p>
+                <p class="letter-text">
+                    "Nour hob hyeti w rou7 9albi...
+
+Lyoum 3id miled a7la wa7da fel denya, el-insana illi jet w nawartli 7ayati w raditha a7la b barcha. Kol 3am w enti dima eddha7ka mte3i, kol 3am w enti essanad w el far7a illi ma tetbaddalch.
+
+N7ebbek mouch barka khaterk Nour, n7ebbek khater m3ak enti 3raft elli el 7ob el 79i9i mawjoud. Kol 3am w enti m3aya, idina f idin b3adhna, w nchallah kol 3am ykoun a7la melli 9ablou.
+
+Joyeux Anniversaire Nour 3innaya 🎂🌹"
+                </p>
+            </div>
+            <div>
+                <h2 class="end-title">"Koll 3am w enti rou7 el-rou7 ❤️"</h2>
+                <p style="text-align: center; font-size: 0.75rem; font-style: italic; color: #f7f1f1;">AND THE BEGINNING OF OUR STORY</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation -->
+    <div class="controls">
+        <button class="nav-btn" onclick="pageFlip.flipPrev()">◀ Précédent</button>
+        <button class="nav-btn" onclick="pageFlip.flipNext()">Suivant ▶</button>
+    </div>
+
+    <script>
+        // Init Flipbook 3D
+        const pageFlip = new St.PageFlip(
+            document.getElementById("magazine"),
+            {
+                width: 380,
+                height: 530,
+                size: "fixed",
+                minWidth: 300,
+                maxWidth: 450,
+                minHeight: 400,
+                maxHeight: 650,
+                maxShadowOpacity: 0.5,
+                showCover: true,
+                mobileScrollSupport: false
+            }
+        );
+
+        pageFlip.loadFromHTML(document.querySelectorAll(".page"));
+
+        // Interactive Card Click
+        function toggleCard(card) {
+            card.classList.toggle('active');
+        }
+
+        // Music Player Toggle
+        const playBtn = document.getElementById('playAudio');
+        const audio = document.getElementById('bgMusic');
+
+        playBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playBtn.textContent = '❚❚';
+            } else {
+                audio.pause();
+                playBtn.textContent = '▶';
+            }
+        });
+    </script>
+</body>
+</html>
